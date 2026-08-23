@@ -7,17 +7,12 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Partial<ResearchRequest>
     const format: ContentFormat = body.format === "long" ? "long" : "short"
-
-    let candidates
-    if (process.env.SEARCH_API_URL && process.env.SEARCH_API_KEY) {
-      candidates = await discoverLiveHistoryTopics(format)
-    } else {
-      candidates = discoverTopics(format)
-    }
+    const useWeb = Boolean(process.env.SEARCH_API_URL && process.env.SEARCH_API_KEY)
+    const candidates = useWeb ? await discoverLiveHistoryTopics(format) : discoverTopics(format)
 
     return NextResponse.json({
       ok: true,
-      source: process.env.SEARCH_API_URL ? "web" : "seed",
+      source: useWeb ? "web" : "seed",
       format,
       niche: "history",
       candidates,
