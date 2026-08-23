@@ -25,9 +25,9 @@ export default function ContentMode() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ format: selectedFormat, niche: "history" }),
       })
-
       if (!response.ok) throw new Error("Research request failed")
       const data = await response.json()
+      if (!data.ok) throw new Error(data.error ?? "Unable to research topics")
       setTopics(data.candidates ?? [])
       setStatus("success")
     } catch (caught) {
@@ -38,14 +38,13 @@ export default function ContentMode() {
 
   if (!started) return <button type="button" onClick={() => setStarted(true)}>LET&apos;S COOK 🔥</button>
   if (!format) return <FormatPicker onSelect={research} />
-  if (status === "error") {
-    return (
-      <section>
-        <p role="alert">Couldn&apos;t research topics. {error}</p>
-        <button type="button" onClick={() => setFormat(null)}>Try Again</button>
-      </section>
-    )
-  }
 
-  return <TopicResults topics={topics} loading={status === "loading"} />
+  return (
+    <TopicResults
+      topics={topics}
+      loading={status === "loading"}
+      error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null}
+      onRetry={() => { setFormat(null); setStatus("idle") }}
+    />
+  )
 }
