@@ -1,5 +1,4 @@
 import ContentMode from "./components/ContentMode"
-import "./globals.css"
 
 export default function Home() {
   return (
