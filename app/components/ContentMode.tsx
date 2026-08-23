@@ -43,7 +43,7 @@ export default function ContentMode() {
     <TopicResults
       topics={topics}
       loading={status === "loading"}
-      error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null}
+      error={status === "error" ? `Couldn't research topics. ${error}` : null}
       onRetry={() => { setFormat(null); setStatus("idle") }}
     />
   )
