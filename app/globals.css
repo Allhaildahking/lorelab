@@ -1,0 +1,9 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { min-height: 100vh; background: #09090b; color: #fafafa; font-family: Arial, Helvetica, sans-serif; }
+main { min-height: 100vh; display: grid; place-items: center; padding: 24px; text-align: center; }
+.lorelab { max-width: 720px; }
+.lorelab h1 { margin: 0; font-size: clamp(3rem, 10vw, 6rem); letter-spacing: -0.06em; }
+.lorelab p { margin: 12px 0 32px; color: #a1a1aa; font-size: 1.1rem; }
+button { border: 0; border-radius: 999px; padding: 16px 26px; font-size: 1rem; font-weight: 700; cursor: pointer; background: #fff; color: #09090b; }
+button:hover { transform: translateY(-1px); }
