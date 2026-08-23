@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Partial<ResearchRequest>
     const format: ContentFormat = body.format === "long" ? "long" : "short"
-    const useWeb = Boolean(process.env.SEARCH_API_URL && process.env.SEARCH_API_KEY)
+    const useWeb = Boolean(process.env.TAVILY_API_KEY)
     const candidates = useWeb ? await discoverLiveHistoryTopics(format) : discoverTopics(format)
 
     return NextResponse.json({
