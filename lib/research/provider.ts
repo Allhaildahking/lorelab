@@ -1,6 +1,7 @@
 import { searchHistoryWeb, type WebSearchResult } from "./web-search"
 import { buildHistoryQueries } from "./query-builder"
-import { normalizeSearchResults, type ScoredSearchResult } from "./normalize"
+import { normalizeSearchResults } from "./normalize"
+import type { ScoredSearchResult } from "./trend-score"
 import type { ContentFormat } from "./types"
 
 export interface ResearchProvider {
