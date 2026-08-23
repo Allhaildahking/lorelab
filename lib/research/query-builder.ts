@@ -7,5 +7,7 @@ export function buildHistoryQueries(format: ContentFormat): string[] {
     `weird shocking historical events ${formatHint}`,
     `historical mysteries recent interest ${formatHint}`,
     `forgotten history stories surprising facts ${formatHint}`,
+    `history events people are talking about this week ${formatHint}`,
+    `historical discoveries anniversaries this week ${formatHint}`,
   ]
 }
