@@ -1,4 +1,5 @@
 import type { ContentFormat, TopicCandidate } from "./types"
+import { rankTopics } from "./scoring"
 
 const seedTopics: TopicCandidate[] = [
   {
@@ -34,15 +35,8 @@ const seedTopics: TopicCandidate[] = [
 ]
 
 export function discoverTopics(format: ContentFormat): TopicCandidate[] {
-  // Temporary deterministic seeds. Live web research replaces these in the research integration step.
-  return [...seedTopics]
-    .sort((a, b) => {
-      const scoreA = a.trendScore * 0.4 + a.curiosityScore * 0.4 + a.visualScore * 0.2
-      const scoreB = b.trendScore * 0.4 + b.curiosityScore * 0.4 + b.visualScore * 0.2
-      return scoreB - scoreA
-    })
-    .map((topic) => ({
-      ...topic,
-      angle: `${format === "short" ? "Short-form" : "Long-form"}: ${topic.angle}`,
-    }))
+  return rankTopics(seedTopics).map((topic) => ({
+    ...topic,
+    angle: `${format === "short" ? "Short-form" : "Long-form"}: ${topic.angle}`,
+  }))
 }
