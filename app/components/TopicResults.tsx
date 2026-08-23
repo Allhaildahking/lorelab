@@ -25,7 +25,20 @@ export default function TopicResults({ topics, loading = false, error, onRetry }
           <h2 style={{ marginTop: 0 }}>{topic.title}</h2>
           <p style={{ color: "#a1a1aa" }}>{topic.summary}</p>
           <p><strong>Trend:</strong> {topic.trendScore}/100 · <strong>Curiosity:</strong> {topic.curiosityScore}/100 · <strong>Visual:</strong> {topic.visualScore}/100</p>
-          <button type="button" onClick={() => copy(topic.id, topic.title)}>{copied === topic.id ? "✓ Copied" : "Copy Topic"}</button>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button type="button" onClick={() => copy(`${topic.id}-title`, topic.title)}>{copied === `${topic.id}-title` ? "✓ Copied" : "Copy Topic"}</button>
+            {topic.sources.map((source) => (
+              <button key={source} type="button" onClick={() => copy(`${topic.id}-${source}`, source)}>{copied === `${topic.id}-${source}` ? "✓ Copied" : "Copy Source"}</button>
+            ))}
+          </div>
+          {topic.sources.length > 0 && (
+            <div style={{ marginTop: 14 }}>
+              <strong>Sources</strong>
+              <ul>
+                {topic.sources.map((source) => <li key={source}><a href={source} target="_blank" rel="noreferrer">{source}</a></li>)}
+              </ul>
+            </div>
+          )}
         </article>
       ))}
     </section>
