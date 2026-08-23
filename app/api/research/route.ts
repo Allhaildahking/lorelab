@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server"
 import { discoverTopics } from "@/lib/research/topic-discovery"
+import { rankTopics } from "@/lib/research/scoring"
 import type { ContentFormat, ResearchRequest } from "@/lib/research/types"
 
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Partial<ResearchRequest>
     const format: ContentFormat = body.format === "long" ? "long" : "short"
-
-    const candidates = discoverTopics(format)
+    const candidates = rankTopics(discoverTopics(format))
 
     return NextResponse.json({
       format,
