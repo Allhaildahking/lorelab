@@ -3,6 +3,7 @@
 import { useState } from "react"
 import FormatPicker from "./FormatPicker"
 import TopicResults from "./TopicResults"
+import StoryBrain from "./StoryBrain"
 import type { TopicCandidate } from "@/lib/research/types"
 
 type Status = "idle" | "loading" | "success" | "error"
@@ -39,17 +40,15 @@ export default function ContentMode() {
 
   if (!started) return <button type="button" onClick={() => setStarted(true)}>LET&apos;S COOK 🔥</button>
   if (!format) return <FormatPicker onSelect={research} />
+  if (selectedTopic) return <StoryBrain topic={selectedTopic} format={format} onBack={() => setSelectedTopic(null)} />
 
   return (
-    <>
-      <TopicResults
-        topics={topics}
-        loading={status === "loading"}
-        error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null}
-        onRetry={() => { setFormat(null); setStatus("idle"); setTopics([]); setSelectedTopic(null) }}
-        onSelect={setSelectedTopic}
-      />
-      {selectedTopic && <p style={{ marginTop: 20 }}>Selected: <strong>{selectedTopic.title}</strong> · Story Brain is next.</p>}
-    </>
+    <TopicResults
+      topics={topics}
+      loading={status === "loading"}
+      error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null}
+      onRetry={() => { setFormat(null); setStatus("idle"); setTopics([]); setSelectedTopic(null) }}
+      onSelect={setSelectedTopic}
+    />
   )
 }
