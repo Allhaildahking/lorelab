@@ -3,9 +3,9 @@
 import { useState } from "react"
 import type { TopicCandidate } from "@/lib/research/types"
 
-type Props = { topics: TopicCandidate[]; loading?: boolean; error?: string | null; onRetry?: () => void }
+type Props = { topics: TopicCandidate[]; loading?: boolean; error?: string | null; onRetry?: () => void; onSelect?: (topic: TopicCandidate) => void }
 
-export default function TopicResults({ topics, loading = false, error, onRetry }: Props) {
+export default function TopicResults({ topics, loading = false, error, onRetry, onSelect }: Props) {
   const [copied, setCopied] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
 
@@ -23,6 +23,11 @@ export default function TopicResults({ topics, loading = false, error, onRetry }
     }
   }
 
+  function selectTopic(topic: TopicCandidate) {
+    setSelected(topic.id)
+    onSelect?.(topic)
+  }
+
   return (
     <section aria-label="Story candidates" style={{ display: "grid", gap: 16, marginTop: 24 }}>
       {topics.map((topic) => (
@@ -34,9 +39,9 @@ export default function TopicResults({ topics, loading = false, error, onRetry }
             <button type="button" onClick={() => copy(`${topic.id}-title`, topic.title)}>{copied === `${topic.id}-title` ? "✓ Copied" : "Copy Topic"}</button>
             <button type="button" onClick={() => copy(`${topic.id}-angle`, topic.angle)}>{copied === `${topic.id}-angle` ? "✓ Copied" : "Copy Angle"}</button>
             {topic.sources.map((source) => (
-              <button key={source} type="button" onClick={() => copy(`${topic.id}-${source}`, source)}>{copied === `${topic.id}-${source` ? "✓ Copied" : "Copy Source"}</button>
+              <button key={source} type="button" onClick={() => copy(`${topic.id}-${source}`, source)}>{copied === `${topic.id}-${source}` ? "✓ Copied" : "Copy Source"}</button>
             ))}
-            <button type="button" onClick={() => setSelected(topic.id)}>{selected === topic.id ? "✓ Selected" : "Use This Topic"}</button>
+            <button type="button" onClick={() => selectTopic(topic)}>{selected === topic.id ? "✓ Selected" : "Use This Topic"}</button>
           </div>
           {selected === topic.id && <p><strong>Locked in.</strong> This topic is ready for Story Brain.</p>}
           {topic.sources.length > 0 && (
