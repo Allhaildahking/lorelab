@@ -1,21 +1,22 @@
 import { NextResponse } from "next/server"
-import { discoverLiveHistoryTopics } from "@/lib/research/live-research"
-import { discoverTopics } from "@/lib/research/topic-discovery"
-import type { ContentFormat, ResearchRequest } from "@/lib/research/types"
+import { researchHistory } from "@/lib/research/provider"
+import { selectBestTopic } from "@/lib/research/topic-selection"
+import type { ContentFormat } from "@/lib/research/types"
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as Partial<ResearchRequest>
+    const body = (await request.json()) as { format?: ContentFormat }
     const format: ContentFormat = body.format === "long" ? "long" : "short"
-    const useWeb = Boolean(process.env.TAVILY_API_KEY)
-    const candidates = useWeb ? await discoverLiveHistoryTopics(format) : discoverTopics(format)
+    const candidates = await researchHistory(format)
+    const bestTopic = selectBestTopic(candidates)
 
     return NextResponse.json({
       ok: true,
-      source: useWeb ? "web" : "seed",
+      source: "web",
       format,
       niche: "history",
       candidates,
+      bestTopic,
       generatedAt: new Date().toISOString(),
     })
   } catch (error) {
