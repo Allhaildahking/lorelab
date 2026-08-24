@@ -11,11 +11,13 @@ export default function ContentMode() {
   const [started, setStarted] = useState(false)
   const [format, setFormat] = useState<"short" | "long" | null>(null)
   const [topics, setTopics] = useState<TopicCandidate[]>([])
+  const [selectedTopic, setSelectedTopic] = useState<TopicCandidate | null>(null)
   const [status, setStatus] = useState<Status>("idle")
   const [error, setError] = useState("")
 
   async function research(selectedFormat: "short" | "long") {
     setFormat(selectedFormat)
+    setSelectedTopic(null)
     setStatus("loading")
     setError("")
 
@@ -35,18 +37,19 @@ export default function ContentMode() {
     }
   }
 
-  if (!started) {
-    return <button type="button" onClick={() => setStarted(true)}>LET&apos;S COOK 🔥</button>
-  }
-
+  if (!started) return <button type="button" onClick={() => setStarted(true)}>LET&apos;S COOK 🔥</button>
   if (!format) return <FormatPicker onSelect={research} />
 
   return (
-    <TopicResults
-      topics={topics}
-      loading={status === "loading"}
-      error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null}
-      onRetry={() => { setFormat(null); setStatus("idle"); setTopics([]) }}
-    />
+    <>
+      <TopicResults
+        topics={topics}
+        loading={status === "loading"}
+        error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null}
+        onRetry={() => { setFormat(null); setStatus("idle"); setTopics([]); setSelectedTopic(null) }}
+        onSelect={setSelectedTopic}
+      />
+      {selectedTopic && <p style={{ marginTop: 20 }}>Selected: <strong>{selectedTopic.title}</strong> · Story Brain is next.</p>}
+    </>
   )
 }
