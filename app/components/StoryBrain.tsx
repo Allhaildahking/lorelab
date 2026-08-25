@@ -32,7 +32,7 @@ export default function StoryBrain({ topic, format, onBack }: Props) {
 
   async function copyAll() {
     if (!story) return
-    const text = `HOOK\n${story.hook}\n\nSCRIPT\n${story.script}\n\nSCENE / IMAGE PROMPTS\n${story.scenePrompts.map((p, i) => `${i + 1}. ${p}`).join("\n")}\n\nTITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\nHASHTAGS\n${story.hashtags.join(" ")}`
+    const text = `HOOK\n${story.hook}\n\nSCRIPT\n${story.script}\n\nSCENES\n${story.scenes.map(scene => `SCENE ${scene.number} (${scene.durationSeconds}s)\nNARRATION: ${scene.narration}\nIMAGE PROMPT: ${scene.imagePrompt}\nVIDEO PROMPT: ${scene.videoPrompt}`).join("\n\n")}\n\nTITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\nHASHTAGS\n${story.hashtags.join(" ")}`
     await navigator.clipboard.writeText(text)
   }
 
@@ -40,8 +40,8 @@ export default function StoryBrain({ topic, format, onBack }: Props) {
     <button type="button" onClick={onBack}>← Back to topics</button>
     <h2>Story Brain 🧠</h2><p><strong>{topic.title}</strong></p>
     {!story && <button type="button" onClick={generate} disabled={loading}>{loading ? "Cooking the story… 🧠" : "Generate Story 🔥"}</button>}
-    {story && <div style={{ display: "flex", gap: 10, marginTop: 12 }}><button type="button" onClick={generate} disabled={loading}>{loading ? "Regenerating…" : "Regenerate 🔄"}</button><button type="button" onClick={copyAll}>Copy All 📋</button></div>}
+    {story && <div style={{ display: "flex", gap: 10, marginTop: 12 }}><button type="button" onClick={generate} disabled={loading}>{loading ? "Regenerating…" : "Regenerate 🔄"}</button><button type="button" onClick={copyAll}>Copy Production Pack 📋</button></div>}
     {error && <p role="alert">{error}</p>}
-    {story && <><Copyable label="Hook" text={story.hook} /><Copyable label="Script" text={story.script} /><section><h3 style={{ marginTop: 24 }}>Scene / Image Prompts</h3>{story.scenePrompts.map((prompt, i) => <Copyable key={i} label={`Scene ${i + 1}`} text={prompt} />)}</section><Copyable label="SEO Title" text={story.title} /><Copyable label="Description" text={story.description} /><Copyable label="Hashtags" text={story.hashtags.join(" ")} /></>}
+    {story && <><Copyable label="Hook" text={story.hook} /><Copyable label="Script" text={story.script} /><section><h3 style={{ marginTop: 24 }}>Production Scenes 🎬</h3>{story.scenes.map(scene => <section key={scene.number} style={{ marginTop: 16, padding: 16, border: "1px solid #27272a", borderRadius: 14 }}><h3 style={{ marginTop: 0 }}>Scene {scene.number} · {scene.durationSeconds}s</h3><Copyable label="Narration" text={scene.narration} /><Copyable label="Image Prompt" text={scene.imagePrompt} /><Copyable label="Video Prompt" text={scene.videoPrompt} /></section>)}</section><Copyable label="SEO Title" text={story.title} /><Copyable label="Description" text={story.description} /><Copyable label="Hashtags" text={story.hashtags.join(" ")} /></>}
   </section>
 }
