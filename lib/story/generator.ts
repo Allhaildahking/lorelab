@@ -7,8 +7,13 @@ const MODEL = "gemini-2.5-flash"
 function parseStory(text: string): StoryOutput {
   const cleaned = text.replace(/^```json\s*/i, "").replace(/\s*```$/i, "").trim()
   const parsed = JSON.parse(cleaned) as StoryOutput
-  if (!parsed.hook || !parsed.script || !Array.isArray(parsed.scenePrompts) || !parsed.title || !parsed.description || !Array.isArray(parsed.hashtags)) {
+  if (!parsed.hook || !parsed.script || !Array.isArray(parsed.scenePrompts) || !Array.isArray(parsed.scenes) || !parsed.title || !parsed.description || !Array.isArray(parsed.hashtags)) {
     throw new Error("Gemini returned an incomplete story")
+  }
+  for (const scene of parsed.scenes) {
+    if (!scene.number || !Number.isFinite(scene.durationSeconds) || !scene.narration || !scene.imagePrompt || !scene.videoPrompt) {
+      throw new Error("Gemini returned an incomplete scene")
+    }
   }
   return parsed
 }
