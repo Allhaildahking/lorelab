@@ -32,5 +32,5 @@ export default function ContentMode() {
   if (!started) return <><button type="button" onClick={() => setStarted(true)}>LET&apos;S COOK 🔥</button><UsedTopics /></>
   if (!format) return <><FormatPicker onSelect={research} /><UsedTopics /></>
   if (selectedTopic) return <StoryBrain topic={selectedTopic} format={format} onBack={() => setSelectedTopic(null)} />
-  return <><TopicResults topics={topics} loading={status === "loading"} error={status === "error" ? `Couldn&apos;t research topics. ${error}` : null} onRetry={() => { setFormat(null); setStatus("idle"); setTopics([]); setSelectedTopic(null) }} onSelect={setSelectedTopic} />{status === "success" && !topics.length && <p>No fresh topics found. Try again and we&apos;ll hunt for different angles.</p>}<UsedTopics /></>
+  return <><TopicResults topics={topics} loading={status === "loading"} error={status === "error" ? `Couldn't research topics. ${error}` : null} onRetry={() => { setFormat(null); setStatus("idle"); setTopics([]); setSelectedTopic(null) }} onSelect={setSelectedTopic} />{status === "success" && !topics.length && <p>No fresh topics found. Try again and we&apos;ll hunt for different angles.</p>}<UsedTopics /></>
 }
